@@ -5,6 +5,7 @@ TRUNCATE TABLE public.admin_building CASCADE;
 TRUNCATE TABLE public.admin_codes CASCADE;
 TRUNCATE TABLE public.admin_stockwerk CASCADE;
 TRUNCATE TABLE public.admin_buildingklasse CASCADE;
+TRUNCATE TABLE public.admin_strassen_sprache CASCADE;
 TRUNCATE TABLE public.admin_heizung1 CASCADE;
 TRUNCATE TABLE public.admin_heizung2 CASCADE;
 TRUNCATE TABLE public.admin_Wasser1 CASCADE;
