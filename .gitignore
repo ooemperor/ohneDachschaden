@@ -27,3 +27,21 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea
+
+/db/data
+/db/data*
+
+# Ignore all python venv
+*venv*
+
+# IDE Files
+*.idea
+.DS_Store
+
+# PyCache Files
+__pycache__
+*.pyc
+
+# Secret Values file for testing
+*.sec.json
+*.sec.conf
