@@ -15,4 +15,6 @@ UPDATE stage.admin_building SET genh2 = NULL where genh2 = '';
 UPDATE stage.admin_building SET gwaerzw1 = NULL where gwaerzw1 = '';
 UPDATE stage.admin_building SET gwaerzw2 = NULL where gwaerzw2 = '';
 
+UPDATE stage.admin_apartment SET wstwk = NULL where wstwk = '';
+
 UPDATE stage.admin_entry SET strsp = NULL where strsp = '';
