@@ -316,7 +316,7 @@ CREATE TABLE
     WKCHE    varchar(128),
     WEXPDAT  varchar(128),
     CONSTRAINT fk_egid_apartment_building FOREIGN KEY (EGID) references admin_building (EGID) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT fk_wstat_apartment_status FOREIGN KEY (WSTWK) references admin_apartment_status (WSTAT) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_wstat_apartment_status FOREIGN KEY (WSTAT) references admin_apartment_status (WSTAT) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_wstwk_apartment_stockwerk FOREIGN KEY (WSTWK) references admin_stockwerk (WSTWK) ON DELETE CASCADE ON UPDATE CASCADE
 
 );
