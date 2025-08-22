@@ -5,7 +5,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
-@Route("") // root URL
+@Route("hello") // root URL
 public class HelloView extends VerticalLayout {
 
     public HelloView() {
