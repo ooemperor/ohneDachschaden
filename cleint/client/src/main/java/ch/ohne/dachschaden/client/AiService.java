@@ -3,6 +3,9 @@ package ch.ohne.dachschaden.client;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.List;
+
 @Service
 public class AiService {
 
@@ -38,18 +41,18 @@ public class AiService {
     /**
      * Return three Solutions for Danger
      */
-    public String getDangerSolutions(String danger) {
+    public String getDangerSolutions(String danger, String address) {
         String prompt = """
-                You are a building safety expert.
-                The user provides a danger to the house: "%s"
-                
-                Give three solutions that would make the house safer from this danger.
-                And try to guess what each solution would cost.
-                Keep the Answer relatively short.
-                Separate those the three solutions and costs with a ;.
-                
-                Give the Answer in German.
-                """.formatted(danger);
+            You are a building safety expert.
+            Danger: "%s".
+            Location: Switzerland, "%s".
+            
+            Provide exactly three solutions to make the house safer from this danger.
+            Each solution must include a recommendation and an estimated cost.
+            Separate the three solutions with a semicolon.
+            Answer in German only.
+            Do not add any introduction, explanation, or extra words — only the three solutions.
+            """.formatted(danger, address);
 
         return chatClient
                 .prompt()
