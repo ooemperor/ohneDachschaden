@@ -66,31 +66,26 @@ public class AiService {
                 Your task:
                 Provide exactly six different, established solutions that a typical private house owner can implement to make the house safer from this danger.
                 Do not suggest measures that must be carried out by the Bund, Kanton, Gemeinde, or other public authorities — only realistic actions for the property owner.
-                Three solution must be low-cost, two medium-cost, and tone high-cost.
+                Six solution must be low-cost, two medium-cost, and tone high-cost.
                 
                 Each solution must contain:
                 A clear recommendation (short and precise, based on commonly used methods in Switzerland).
                 An estimated cost range in CHF (realistic for Swiss residential houses).
-                
-                Write the three solutions in German only.
-                Separate the solutions with a plus sign (+).
-                Do not add introductions, explanations, numbering, or extra words — only the three solutions.
-                
                 "%s"
                 
-                Format:                
-                [Günstige Lösung: Empfehlung + Kosten (lowend - highend)] + 
-                [Günstige Lösung: Empfehlung + Kosten (lowend - highend)] + 
-                [Günstige Lösung: Empfehlung + Kosten (lowend - highend)] + 
-                [Mittlere Lösung: Empfehlung + Kosten (lowend - highend)] + 
-                [Mittlere Lösung: Empfehlung + Kosten (lowend - highend)] + 
-                [Teure Lösung: Empfehlung + Kosten (lowend - highend)]
+                Write the six solutions in German only.
+                Separate the solutions with (@).
+                Do not add introductions, explanations, numbering, or extra words — only the six solutions.
+                
+                Format it like this: [Günstige Lösung: Empfehlung und Kosten in CHF (lowend - highend)] @ [Günstige Lösung: Empfehlung und Kosten in CHF (lowend - highend)] @ [Günstige Lösung: Empfehlung und Kosten in CHF (lowend - highend)] @ [Mittlere Lösung: Empfehlung und Kosten in CHF (lowend - highend)] @ [Mittlere Lösung: Empfehlung und Kosten in CHF (lowend - highend)] @ [Teure Lösung: Empfehlung und Kosten in CHF (lowend - highend)]
             """.formatted(danger, address, addtionalPrompt);
 
-        return chatClient
+        String answer = chatClient
                 .prompt()
                 .user(prompt)
                 .call()
                 .content();
+        System.out.println(answer);
+        return answer;
     }
 }
