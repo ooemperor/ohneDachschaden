@@ -297,7 +297,6 @@ on column stage.admin_entry.dexpdat is 'Datum des Exports';
 CREATE TABLE
     stage.gvb_dangers
 (
-    Load_DTS                    TIMESTAMP,
     OBJECTID                    BIGINT,
     GWR_EGID                    BIGINT,
     BEGIG                       BIGINT,
