@@ -292,3 +292,32 @@ comment
 on column stage.admin_entry.doffadr is 'Offizielle Adresse';
 comment
 on column stage.admin_entry.dexpdat is 'Datum des Exports';
+
+
+CREATE TABLE
+    stage.gvb_dangers
+(
+    Load_DTS                    TIMESTAMP,
+    OBJECTID                    BIGINT,
+    GWR_EGID                    BIGINT,
+    BEGIG                       BIGINT,
+    OBERFLAECHENABFLUSS         VARCHAR(128),
+    HOCHWASSER_SEEN             VARCHAR(128),
+    HOCHWASSER_FLIESSGEWAESSER  VARCHAR(128),
+    HAGEL                       BIGINT,
+    STURM                       float,
+    HAUSNUMMER                  VARCHAR(128),
+    STRNAME                     VARCHAR(128),
+    PLZ                         VARCHAR(128),
+    ORTSCHAFT                   VARCHAR(128),
+    ADRESSE                     VARCHAR(128),
+    ADRESSE_POPUP               VARCHAR(128),
+    OBERFLAECHENABFLUSS_TEXT_DE VARCHAR(128),
+    OBERFLAECHENABFLUSS_TEXT_FR VARCHAR(128),
+    FLIESSGEWAESSER_TEXT_DE     VARCHAR(128),
+    FLIESSGEWAESSER_TEXT_FR     VARCHAR(128),
+    SEEN_TEXT_DE                VARCHAR(128),
+    SEEN_TEXT_FR                VARCHAR(128),
+    HAGEL_TEXT                  VARCHAR(128),
+    STURM_TEXT                  VARCHAR(128)
+);
