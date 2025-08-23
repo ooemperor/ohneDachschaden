@@ -1,0 +1,10 @@
+
+services:
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ohneDachschadenClient
+    network_mode: bridge
+    ports:
+      - 8080:8080
