@@ -19,7 +19,6 @@ public class EgidService {
 
     public String findEgidByAddress(String address) throws Exception {
         try {
-            System.out.println("findEgidByAddress: " + address);
             // Step 1: SearchServer
             String response = restTemplate.getForObject(SEARCH_URL, String.class, address);
             JsonNode root = objectMapper.readTree(response);
@@ -32,14 +31,12 @@ public class EgidService {
             if (featureId == null || featureId.isEmpty()) {
                 throw new Exception("FeatureId nicht gefunden.");
             }
-            System.out.println("featureId: " + featureId);
 
             // Step 2: Feature Info
             String featureResponse = restTemplate.getForObject(FEATURE_URL, String.class, featureId);
             JsonNode featureRoot = objectMapper.readTree(featureResponse);
 
             String egid = featureRoot.path("feature").path("attributes").path("egid").asText();
-            System.out.println("egid2: " + egid);
             return egid.isEmpty() ? "EGID nicht gefunden." : egid;
 
         } catch (Exception e) {

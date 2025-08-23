@@ -16,13 +16,13 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.OptionalParameter;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Route("detail")
 public class DetailView extends VerticalLayout implements HasUrlParameter<String> {
@@ -179,8 +179,16 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
                     sub.getStyle().set("color", "var(--lumo-secondary-text-color)");
                     sub.getStyle().set("font-weight", "600");
 
+                    // Image Buttons
+
+                    Button imageButton = new Button("See other solutions");
+                    Map<String, List<String>> parameters = new HashMap<>();
+                    parameters.put("danger", Collections.singletonList(danger.getName()));
+                    parameters.put("address", Collections.singletonList(address));
+                    imageButton.addClickListener(e -> UI.getCurrent().navigate("/images", new QueryParameters(parameters)));
+
                     // Card component (Details) with premium styling
-                    Details card = new Details(header, dangerExplanationParagraphSubheader, dangerExplanationParagraph, sub, recommendations);
+                    Details card = new Details(header, dangerExplanationParagraphSubheader, dangerExplanationParagraph, sub, recommendations, imageButton);
                     card.setOpened(false);
                     card.setWidthFull();
                     card.addThemeVariants(DetailsVariant.FILLED, DetailsVariant.SMALL);
