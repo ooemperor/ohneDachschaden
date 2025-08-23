@@ -185,8 +185,9 @@ public class ImageView extends VerticalLayout implements HasUrlParameter<String>
                 overlay.getStyle().set("pointer-events", "none");
 
                 com.vaadin.flow.component.html.Image logo = new com.vaadin.flow.component.html.Image("/logo.png", "logo");
-                logo.setWidth("10px");
-                logo.setHeight("10px");
+                logo.setWidth("25px");
+                logo.setHeight("25px");
+                logo.getStyle().set("border-radius", "5px");
                 // prevent the overlay image from affecting layout
                 logo.getStyle().set("display", "block");
 
