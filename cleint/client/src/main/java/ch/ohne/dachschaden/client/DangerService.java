@@ -1,6 +1,7 @@
 package ch.ohne.dachschaden.client;
 
 import ch.ohne.dachschaden.client.adminBuilding.AdminBuilding;
+import ch.ohne.dachschaden.client.geoAdmin.EgidService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,7 @@ public class DangerService {
      */
     public List<String> getRecommendations(String egid, String danger, String address) {
         AdminBuilding building = egidService.findBuildingByEgid(egid);
-        return List.of(aiService.getDangerSolutions(building, danger, address).split(";"));
+        return List.of(aiService.getDangerSolutions(building, danger, address).split("\\+"));
     }
 
     private List<Danger> buildDangersFromResponse(JsonNode root) {

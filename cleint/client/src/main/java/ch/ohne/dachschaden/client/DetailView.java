@@ -1,5 +1,6 @@
 package ch.ohne.dachschaden.client;
 
+import ch.ohne.dachschaden.client.geoAdmin.EgidService;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.details.Details;

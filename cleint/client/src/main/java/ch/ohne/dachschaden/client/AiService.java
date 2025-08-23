@@ -65,7 +65,7 @@ public class AiService {
             Each solution must include a recommendation and an estimated cost.
             "%s".
            
-            Separate the three solutions with a semicolon.
+            Separate the three solutions with a plus character.
             Answer in German only.
             Do not add any introduction, explanation, or extra words — only the three solutions.
             """.formatted(danger, address, addtionalPrompt);
