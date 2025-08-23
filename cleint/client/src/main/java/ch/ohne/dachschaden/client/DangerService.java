@@ -1,17 +1,49 @@
 package ch.ohne.dachschaden.client;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class DangerService {
 
+    private final EgidService egidService;
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @Autowired
+    public DangerService(
+            EgidService egidService
+    ) {
+        this.egidService = egidService;
+    }
     /**
      * Returns a list of potential dangers for a given address.
      * For now, this returns fake data. Prepared code for a future API call is included below as comments.
      */
     public List<String> getDangers(String address) {
+        try {
+            String egid = egidService.findEgidByAddress(address);
+            System.out.println("egid: " + egid);
+            // Gleichheitszeichen korrekt kodieren
+            String url = "https://webgis.gvb.ch/server/rest/services/natur/GEBAEUDE_NATURGEFAHREN_BE_DE_FR/MapServer/1/query" +
+                    "?where=GWR_EGID=" + egid +
+                    "&outFields=OBJECTID,GWR_EGID,BEGID,OBERFLAECHENABFLUSS,HOCHWASSER_SEEN,HOCHWASSER_FLIESSGEWAESSER,HAGEL,STURM,HAUSNUMMER,STRNAME,PLZ,ORTSCHAFT,ADRESSE,ADRESSE_POPUP,OBERFLAECHENABFLUSS_TEXT_DE,OBERFLAECHENABFLUSS_TEXT_FR,FLIESSGEWAESSER_TEXT_DE,FLIESSGEWAESSER_TEXT_FR,SEEN_TEXT_DE,SEEN_TEXT_FR,HAGEL_TEXT,STURM_TEXT,SHAPE" +
+                    "&returnGeometry=true" +
+                    "&f=pjson";
+            System.out.println("url: " + url);
+            String response = restTemplate.getForObject(url, String.class);
+            JsonNode root = objectMapper.readTree(response);
+            System.out.println(root);
+        } catch (Exception e) {
+            System.out.println(e);
+            return new ArrayList<>();
+        }
         // Example of how this could look with a real API call in the future:
         //
         // String endpoint = "https://api.example.com/dangers?address=" + URLEncoder.encode(address, StandardCharsets.UTF_8);
