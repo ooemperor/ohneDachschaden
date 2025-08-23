@@ -4,15 +4,18 @@ import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.details.DetailsVariant;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.ListItem;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.UnorderedList;
+import com.vaadin.flow.component.HtmlComponent;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
@@ -81,8 +84,58 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
         dangerCards.setWidthFull();
         dangerCards.getStyle().set("gap", "var(--lumo-space-m)");
 
-        content.add(topBar, description, dangerCards);
-        add(content);
+        // Video dialog setup
+        Dialog videoDialog = new Dialog();
+        videoDialog.setHeaderTitle("Schaden-Meldung Zentrale");
+        videoDialog.setWidth("min(90vw, 900px)");
+        videoDialog.setMaxWidth("90vw");
+        videoDialog.setCloseOnEsc(true);
+        videoDialog.setCloseOnOutsideClick(true);
+
+        HtmlComponent video = new HtmlComponent("video");
+        video.getElement().setAttribute("controls", true);
+        // Do not autoplay on page load; only start on button press
+        video.getElement().setAttribute("playsinline", true);
+        video.getElement().setAttribute("preload", "metadata");
+        video.getElement().getStyle().set("width", "100%");
+        video.getElement().getStyle().set("max-height", "80vh");
+        
+        // Serve from Spring Boot static resources (classpath:/resources/)
+        video.getElement().setAttribute("src", "/MerciSchadenMeldung.mp4");
+        video.getElement().setAttribute("type", "video/mp4");
+        videoDialog.add(video);
+
+        // Pause/reset when dialog closes
+        videoDialog.addOpenedChangeListener(ev -> {
+            if (!ev.isOpened()) {
+                video.getElement().executeJs("try{ this.pause(); this.currentTime = 0; }catch(e){}");
+            }
+        });
+
+        // Footer with play button
+        Button playVideoButton = new Button("Schaden Melden", new Icon(VaadinIcon.EXCLAMATION_CIRCLE));
+        playVideoButton.addClickListener(e -> {
+            videoDialog.open();
+            // Start playback when ready; counts as user gesture
+            video.getElement().executeJs(
+                "const el = this; try { el.pause(); el.currentTime = 0; } catch(e) {}\n" +
+                "if (el.readyState >= 3) { el.play(); } else {\n" +
+                "  const onCanPlay = () => { el.play(); el.removeEventListener('canplay', onCanPlay); };\n" +
+                "  el.addEventListener('canplay', onCanPlay, { once: true });\n" +
+                "  el.load();\n" +
+                "}"
+            );
+        });
+        playVideoButton.getStyle().set("margin-top", "var(--lumo-space-l)");
+        playVideoButton.getStyle().set("box-shadow", "var(--lumo-box-shadow-s)");
+
+        HorizontalLayout footer = new HorizontalLayout(playVideoButton);
+        footer.setWidthFull();
+        footer.setJustifyContentMode(JustifyContentMode.CENTER);
+        footer.setPadding(false);
+
+        content.add(topBar, description, dangerCards, footer);
+        add(content, videoDialog);
     }
 
     @Override
