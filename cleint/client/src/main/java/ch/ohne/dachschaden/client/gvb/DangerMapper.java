@@ -1,6 +1,5 @@
 package ch.ohne.dachschaden.client.gvb;
 
-import ch.ohne.dachschaden.client.Danger;
 import ch.ohne.dachschaden.client.Severity;
 
 import java.util.ArrayList;

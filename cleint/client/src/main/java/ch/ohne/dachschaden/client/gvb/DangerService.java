@@ -1,7 +1,6 @@
 package ch.ohne.dachschaden.client.gvb;
 
 import ch.ohne.dachschaden.client.AiService;
-import ch.ohne.dachschaden.client.Danger;
 import ch.ohne.dachschaden.client.Severity;
 import ch.ohne.dachschaden.client.adminBuilding.AdminBuilding;
 import ch.ohne.dachschaden.client.exceptions.DangerDataNotFoundException;
@@ -65,6 +64,6 @@ public class DangerService {
 
     public List<String> getRecommendations(@NotBlank String egid, @NotBlank String danger, @NotBlank String address) {
         AdminBuilding building = egidService.findBuildingByEgid(egid);
-        return List.of(aiService.getDangerSolutions(building, danger, address).split("\\+"));
+        return List.of(aiService.getDangerSolutions(building, danger, address).replaceAll("\\[", "").replaceAll("\\]", "").split("@"));
     }
 }

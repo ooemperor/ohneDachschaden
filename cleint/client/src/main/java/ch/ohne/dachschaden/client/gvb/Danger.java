@@ -1,4 +1,6 @@
-package ch.ohne.dachschaden.client;
+package ch.ohne.dachschaden.client.gvb;
+
+import ch.ohne.dachschaden.client.Severity;
 
 public class Danger {
     private final String name;

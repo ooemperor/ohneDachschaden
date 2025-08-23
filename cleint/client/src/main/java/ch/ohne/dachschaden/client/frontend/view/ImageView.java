@@ -1,4 +1,4 @@
-package ch.ohne.dachschaden.client;
+package ch.ohne.dachschaden.client.frontend.view;
 
 import ch.ohne.dachschaden.client.picture.Picture;
 import ch.ohne.dachschaden.client.picture.PictureService;
