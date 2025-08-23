@@ -7,7 +7,7 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 
 @Configuration
-@EnableConfigurationProperties(GeoAdminProperties.class)
+@EnableConfigurationProperties({GeoAdminProperties.class, GvbProperties.class})
 public class ClientConfig {
 
     @Bean
@@ -19,6 +19,16 @@ public class ClientConfig {
         return RestClient.builder()
                 .baseUrl(props.baseUrl())
                 .requestFactory(requestFactory)
+                .build();
+    }
+    @Bean
+    RestClient gvbRestClient(GvbProperties props) {
+        var rf = new SimpleClientHttpRequestFactory();
+        rf.setConnectTimeout(props.connectTimeoutMs());
+        rf.setReadTimeout(props.readTimeoutMs());
+        return RestClient.builder()
+                .baseUrl(props.baseUrl())
+                .requestFactory(rf)
                 .build();
     }
 }

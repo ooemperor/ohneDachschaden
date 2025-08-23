@@ -36,7 +36,7 @@ public class EgidService {
             var featureId = Optional.ofNullable(search)
                     .map(SearchResponse::results)
                     .filter(list -> !list.isEmpty())
-                    .map(list -> list.get(0))
+                    .map(list -> list.getFirst())
                     .map(SearchResponse.Result::attrs)
                     .map(SearchResponse.Attrs::featureId)
                     .filter(id -> id != null && !id.isBlank())
@@ -44,14 +44,13 @@ public class EgidService {
 
             FeatureResponse feature = geoAdminClient.fetchFeature(featureId);
 
-            String egid = Optional.ofNullable(feature)
+            return Optional.ofNullable(feature)
                     .map(FeatureResponse::feature)
                     .map(FeatureResponse.Feature::attributes)
                     .map(FeatureResponse.Attributes::egid)
                     .filter(e -> e != null && !e.isBlank())
                     .orElseThrow(() -> new AddressNotFoundException("EGID nicht gefunden."));
 
-            return egid;
 
         } catch (AddressNotFoundException e) {
             throw e;

@@ -4,9 +4,6 @@ import ch.ohne.dachschaden.client.adminBuilding.AdminBuilding;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-
 @Service
 public class AiService {
 
@@ -51,9 +48,9 @@ public class AiService {
             GBAUJPrompt = "\nBuilt in %s.".formatted(building.getGBAUJ());
         }
         if (building.getGASTW() != null) {
-            GASTWPrompt= "\nThe building has %s floors.".formatted(building.getGBAUJ());
+            GASTWPrompt= "\nThe building has %s floors.".formatted(building.getGASTW());
         }
-        String addtionalPrompt = "Additional information to the building to consider for the solutions: %s %s\n".formatted(building.getGASTW(), building.getGBAUJ());
+        String addtionalPrompt = "Additional information to the building to consider for the solutions: %s %s\n".formatted(GBAUJPrompt, GASTWPrompt);
 
 
         String prompt = """
