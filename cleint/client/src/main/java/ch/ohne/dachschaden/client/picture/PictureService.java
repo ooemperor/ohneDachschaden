@@ -14,4 +14,8 @@ public class PictureService {
     public Picture getPicture(int id) {
         return pictureRepository.findById(id).orElse(null);
     }
+
+    public Picture[] getPictures(String danger) {
+        return pictureRepository.findAllByDanger(danger);
+    }
 }
