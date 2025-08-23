@@ -168,8 +168,8 @@ public class HomeView extends VerticalLayout {
                 "    el._setMarkerLocation(lat, lng, true);" +
                 "    fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=' + lat + '&lon=' + lng)" +
                 "      .then(r=>r.json()).then(data=>{ const disp = data.display_name || (lat + ',' + lng); host.$server.updateAddress(disp, lat, lng); });" +
-                "  }, function(){ el._map.setView([47.3769, 8.5417], 12); });" +
-                "} else { el._map.setView([47.3769, 8.5417], 12); }" +
+                "  }, function(){ el._map.setView([46.9437888, 7.4324136], 12); });" +
+                "} else { el._map.setView([46.9437888, 7.4324136], 12); }" +
                 "el._map.on('click', function(e){" +
                 "  const lat = e.latlng.lat; const lng = e.latlng.lng;" +
                 "  el._setMarkerLocation(lat, lng, false);" +
