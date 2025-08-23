@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Route("images")
 @SuppressWarnings({"removal", "deprecation"})
@@ -160,10 +161,36 @@ public class ImageView extends VerticalLayout implements HasUrlParameter<String>
             card.getStyle().set("display", "flex");
             card.getStyle().set("justify-content", "center");
             card.getStyle().set("align-items", "center");
+            // Ensure we can absolutely position overlay within the card
+            card.getStyle().set("position", "relative");
             // Flex sizing: up to 3 per row, responsive wrap (min ~160px)
             card.getStyle().set("flex", "1 1 calc(33.333% - 12px)");
             card.getStyle().set("max-width", "calc(33.333% - 12px)");
             card.getStyle().set("min-width", "160px");
+
+            // Randomly add a top-right logo overlay (10x10), centered within a small corner box
+            boolean showLogo = ThreadLocalRandom.current().nextBoolean();
+            if (showLogo) {
+                Div overlay = new Div();
+                overlay.getStyle().set("position", "absolute");
+                overlay.getStyle().set("top", "0");
+                overlay.getStyle().set("right", "0");
+                overlay.getStyle().set("width", "20px");
+                overlay.getStyle().set("height", "20px");
+                overlay.getStyle().set("display", "flex");
+                overlay.getStyle().set("align-items", "center");
+                overlay.getStyle().set("justify-content", "center");
+                overlay.getStyle().set("pointer-events", "none");
+
+                com.vaadin.flow.component.html.Image logo = new com.vaadin.flow.component.html.Image("/logo.png", "logo");
+                logo.setWidth("10px");
+                logo.setHeight("10px");
+                // prevent the overlay image from affecting layout
+                logo.getStyle().set("display", "block");
+
+                overlay.add(logo);
+                card.add(overlay);
+            }
 
             gallery.add(card);
         }

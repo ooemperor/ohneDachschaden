@@ -101,7 +101,7 @@ public class HomeView extends VerticalLayout {
 
         mapDiv.setId("leafletMap");
         mapDiv.getStyle().set("width", "100%");
-        mapDiv.getStyle().set("height", "400px");
+        mapDiv.getStyle().set("height", "75%");
         mapDiv.getStyle().set("border", "1px solid var(--lumo-contrast-20pct)");
         mapDiv.getStyle().set("borderRadius", "8px");
         // Make sure map container participates in stacking order with a low z-index
@@ -113,7 +113,7 @@ public class HomeView extends VerticalLayout {
         logButton.addClickListener(e -> {
             UI.getCurrent().navigate("detail/" + selectedAddress);
         });
-
+        logButton.getStyle().set("background-color", "#FFFFFF");
         add(addressBox, mapDiv, logButton);
         setHorizontalComponentAlignment(Alignment.STRETCH, addressBox, mapDiv, logButton);
     }

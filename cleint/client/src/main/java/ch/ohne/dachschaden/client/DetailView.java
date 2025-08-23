@@ -48,8 +48,8 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
         setWidthFull();
         setMinHeight("100%");
         setSpacing(false);
-        setPadding(false);
-        getStyle().set("background", "linear-gradient(180deg, var(--lumo-base-color) 0%, var(--lumo-contrast-5pct) 100%)");
+        setPadding(true);
+        // Use global page background; keep view background transparent for consistency
 
         // Centered content container for responsive layout
         content.setWidthFull();
@@ -67,6 +67,7 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
         backButton.getStyle().set("height", "40px");
         backButton.getStyle().set("padding", "0");
         backButton.getStyle().set("box-shadow", "var(--lumo-box-shadow-xs)");
+        backButton.getStyle().set("background-color", "#FFFFFF");
 
         topBar.setWidthFull();
         topBar.setAlignItems(Alignment.CENTER);
@@ -130,6 +131,7 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
         });
         playVideoButton.getStyle().set("margin-top", "var(--lumo-space-l)");
         playVideoButton.getStyle().set("box-shadow", "var(--lumo-box-shadow-s)");
+        playVideoButton.getStyle().set("background-color", "#FFFFFF");
 
         HorizontalLayout footer = new HorizontalLayout(playVideoButton);
         footer.setWidthFull();
