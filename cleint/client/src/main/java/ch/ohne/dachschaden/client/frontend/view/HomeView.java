@@ -1,4 +1,4 @@
-package ch.ohne.dachschaden.client;
+package ch.ohne.dachschaden.client.frontend.view;
 
 import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.ClientCallable;

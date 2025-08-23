@@ -1,7 +1,6 @@
 package ch.ohne.dachschaden.client.gvb;
 
 import ch.ohne.dachschaden.client.AiService;
-import ch.ohne.dachschaden.client.Danger;
 import ch.ohne.dachschaden.client.Severity;
 import ch.ohne.dachschaden.client.adminBuilding.AdminBuilding;
 import ch.ohne.dachschaden.client.exceptions.DangerDataNotFoundException;
