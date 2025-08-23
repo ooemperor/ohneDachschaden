@@ -57,9 +57,11 @@ public class ImageView extends VerticalLayout implements HasUrlParameter<String>
         backBtn.getStyle().set("width", "40px");
         backBtn.getStyle().set("height", "40px");
         backBtn.getStyle().set("padding", "0");
+        backBtn.getStyle().set("background-color", "#FFFFFF");
         backBtn.getStyle().set("box-shadow", "var(--lumo-box-shadow-xs)");
 
         Button uploadBtn = new Button("Foto aufnehmen/hochladen", new Icon(VaadinIcon.CAMERA));
+        uploadBtn.getElement().setProperty("background-color", "#FFFFFF");
         uploadBtn.getStyle().set("box-shadow", "var(--lumo-box-shadow-s)");
 
         FileBuffer buffer = new FileBuffer();
