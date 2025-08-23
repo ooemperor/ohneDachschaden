@@ -1,22 +1,21 @@
 """
 Processor for the data of the webgis api
-@author: Michael Kaiser
+Author: Michael Kaiser
 """
 import json
 from threading import Thread
-
-import requests as req
-import psycopg2
-from time import time, sleep
+from time import sleep
 import os.path
 from tqdm import tqdm
 import sys
+from scraping.Config import config
 
 
-def fetch_result(result: str):
+def fetch_result(result: str) -> None:
     """
     Read the json out of the result file and write it to the db.
-    :param result: the filename
+    :param result: the filename which defines the result
+    :type result: str
     :return: None
     """
     f = open(f"./results/{result}")
@@ -30,7 +29,6 @@ def fetch_result(result: str):
         data = json.loads(data)
         features = dict(data)["features"][0]["attributes"]
     except Exception as err:
-        print(err)
         return
 
     insert_in_db(features)
@@ -43,15 +41,8 @@ def insert_in_db(features) -> None:
     :return:
     """
     lookup_string = f"SELECT * FROM stage.gvb_dangers WHERE objectid = '{features['OBJECTID']}'"
-    # Connect to your postgres DB
-    conn = psycopg2.connect(
-        dbname="UDM",
-        user="postgres",
-        password="postgres",
-        host="10.101.10.42",
-        port="5432"
-    )
 
+    conn = config.get_connection()
     # Create a cursor object
     cur = conn.cursor()
 
@@ -72,7 +63,11 @@ def insert_in_db(features) -> None:
     return
 
 
-def main():
+def main() -> None:
+    """
+    Main Runner function to process the data
+    :return: None
+    """
     results = os.listdir("./results")
 
     for result in tqdm(results):
