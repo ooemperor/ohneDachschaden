@@ -140,14 +140,15 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
 
     @Override
     public void setParameter(BeforeEvent event, @OptionalParameter String address) {
+        String formattedAddress = formatAddress(address);
         dangerCards.removeAll();
         if (address != null && !address.isBlank()) {
-            title.setText("Risk details for " + formatAddress(address));
+            title.setText("Risk details for " + formattedAddress);
 
             // Replace description content to include context
             description.setText("Below are identified risk categories and practical recommendations tailored for this address.");
 
-            dangers = service.getDangers(address);
+            dangers = service.getDangers(formattedAddress);
             if (dangers != null) {
                 for (String danger : dangers) {
                     // Header for card
@@ -254,12 +255,12 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
             }
         }
 
-        if (street != null && number != null && postal != null && city != null) {
-            return street + " " + number + ", " + postal + " " + city;
+        if (street != null && number != null && city != null) {
+            return street + " " + number + " " + city;
         }
         if (street != null && number != null) {
             if (postal != null && city != null) {
-                return street + " " + number + ", " + postal + " " + city;
+                return street + " " + number + " " + city;
             }
             return street + " " + number;
         }
