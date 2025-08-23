@@ -1,5 +1,6 @@
 package ch.ohne.dachschaden.client;
 
+import ch.ohne.dachschaden.client.AiService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +16,17 @@ import java.util.List;
 public class DangerService {
 
     private final EgidService egidService;
+    private final AiService aiService;
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
     public DangerService(
-            EgidService egidService
+            EgidService egidService,
+            AiService aiService
     ) {
         this.egidService = egidService;
+        this.aiService = aiService;
     }
     /**
      * Returns a list of potential dangers for a given address.
@@ -31,6 +35,7 @@ public class DangerService {
     public List<Danger> getDangers(String address) {
         try {
             String egid = egidService.findEgidByAddress(address);
+            System.out.println(egid);
             // Gleichheitszeichen korrekt kodieren
             String url = "https://webgis.gvb.ch/server/rest/services/natur/GEBAEUDE_NATURGEFAHREN_BE_DE_FR/MapServer/1/query" +
                     "?where=GWR_EGID=" + egid +
@@ -53,9 +58,14 @@ public class DangerService {
         }
     }
 
+    /**
+     * Returns an Explanation as a String of the Danger (What is it, what can it do, how can this happen) from ChatGPT
+     */
     public String getDangerExplanation(String danger) {
-        return "Begründung wieso das Scheisse ist";
+
+        return aiService.getDangerExplanation(danger);
     }
+
     /**
      * Returns a list of recommendations for a given address and selected danger (Gefahr).
      * For now, this returns fake data. Prepared code for a future API call is included below as comments.
