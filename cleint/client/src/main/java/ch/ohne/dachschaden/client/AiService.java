@@ -19,16 +19,21 @@ public class AiService {
      */
     public String getDangerExplanation(String danger) {
         String prompt = """
-                You are a building safety expert.
-                The user provides a danger to the house: "%s"
+                You are a certified specialist for building safety.
+                The customer provides you with a specific danger for the house: "%s"
                 
-                Explain the danger in two to three phrases.
-                Then then say shortly what this danger can do to the house.
-                Separate those two things with a ;.
+                Your task:
                 
-                Give the Answer in German.
-                            Do not add any introduction, explanation, or extra words — only the three solutions.
-
+                Explain this danger in 2–3 sentences in German, and make sure to mention several realistic reasons or mechanisms how this danger can affect the building (at least 2, maximum 3).
+                
+                In a short and clear statement, describe what this danger could do to the house.
+                
+                Format your answer exactly like this:
+                
+                [Explanation in 2–3 sentences, mentioning several realistic reasons] + [Short consequence for the house]
+                
+                
+                Do not add anything else. Always answer in German.
                 """.formatted(danger);
 
         return chatClient
@@ -54,17 +59,32 @@ public class AiService {
 
 
         String prompt = """
-            You are an professional for building-assurances and building-safety.
-            Danger: "%s".
-            Location: Switzerland, "%s".
-            
-            Provide exactly three solutions to make the house safer from this danger.
-            Each solution must include a recommendation and an estimated cost.
-            "%s".
-           
-            Separate the three solutions with a plus character.
-            Answer in German only.
-            Do not add any introduction, explanation, or extra words — only the three solutions.
+                You are a professional for building assurances and building safety.
+                Danger: "%s"
+                Location: Switzerland, "%s"
+                
+                Your task:
+                Provide exactly six different, established solutions that a typical private house owner can implement to make the house safer from this danger.
+                Do not suggest measures that must be carried out by the Bund, Kanton, Gemeinde, or other public authorities — only realistic actions for the property owner.
+                Three solution must be low-cost, two medium-cost, and tone high-cost.
+                
+                Each solution must contain:
+                A clear recommendation (short and precise, based on commonly used methods in Switzerland).
+                An estimated cost range in CHF (realistic for Swiss residential houses).
+                
+                Write the three solutions in German only.
+                Separate the solutions with a plus sign (+).
+                Do not add introductions, explanations, numbering, or extra words — only the three solutions.
+                
+                "%s"
+                
+                Format:                
+                [Günstige Lösung: Empfehlung + Kosten (lowend - highend)] + 
+                [Günstige Lösung: Empfehlung + Kosten (lowend - highend)] + 
+                [Günstige Lösung: Empfehlung + Kosten (lowend - highend)] + 
+                [Mittlere Lösung: Empfehlung + Kosten (lowend - highend)] + 
+                [Mittlere Lösung: Empfehlung + Kosten (lowend - highend)] + 
+                [Teure Lösung: Empfehlung + Kosten (lowend - highend)]
             """.formatted(danger, address, addtionalPrompt);
 
         return chatClient
