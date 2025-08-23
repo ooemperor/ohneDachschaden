@@ -27,7 +27,7 @@ import java.util.Map;
 @Route("detail")
 public class DetailView extends VerticalLayout implements HasUrlParameter<String> {
 
-    private final H1 title = new H1("Address Details");
+    private final H1 title = new H1("Details der ausgewählten Adresse");
     private final Paragraph description = new Paragraph();
     private final VerticalLayout dangerCards = new VerticalLayout();
     private final VerticalLayout content = new VerticalLayout();
@@ -145,10 +145,10 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
         String formattedAddress = formatAddress(address);
         dangerCards.removeAll();
         if (address != null && !address.isBlank()) {
-            title.setText("Risk details for " + formattedAddress);
+            title.setText("Risikendetails für die Adresse:\n" + formattedAddress);
 
             // Replace description content to include context
-            description.setText("Below are identified risk categories and practical recommendations tailored for this address.");
+            description.setText("Unten finden Sie die ermittelten Risikokategorien sowie praktische Empfehlungen, die auf diese Adresse zugeschnitten sind.");
             try {
                 String egid = egidService.findEgidByAddress(formattedAddress);
                 System.out.println("egid: " + egid);
@@ -160,7 +160,7 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
                         header.getStyle().set("margin", "0");
                         header.getStyle().set("font-weight", "700");
 
-                        Paragraph dangerExplanationParagraphSubheader = new Paragraph("Explanation");
+                        Paragraph dangerExplanationParagraphSubheader = new Paragraph("Erläuterung des Risikos");
                         dangerExplanationParagraphSubheader.getStyle().set("margin", "0");
                         dangerExplanationParagraphSubheader.getStyle().set("color", "var(--lumo-secondary-text-color)");
                         dangerExplanationParagraphSubheader.getStyle().set("font-weight", "600");
@@ -178,20 +178,20 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
                         }
 
                         // Optional subheader
-                        Paragraph sub = new Paragraph("Recommendations");
+                        Paragraph sub = new Paragraph("Empfehlung zur Risikolinderung");
                         sub.getStyle().set("margin", "0");
                         sub.getStyle().set("color", "var(--lumo-secondary-text-color)");
                         sub.getStyle().set("font-weight", "600");
 
                         // Image Buttons
-                        Button imageButton = new Button("See other solutions");
+                        Button imageButton = new Button("So sind andere Personen das Problem angegangen");
                         Map<String, List<String>> parameters = new HashMap<>();
                         parameters.put("danger", Collections.singletonList(danger.getName()));
                         parameters.put("address", Collections.singletonList(address));
                         imageButton.addClickListener(e -> UI.getCurrent().navigate("/images", new QueryParameters(parameters)));
 
                         // Card component (Details) with premium styling
-                        Details card = new Details(header, dangerExplanationParagraphSubheader, dangerExplanationParagraph, sub, recommendations);
+                        Details card = new Details(header, dangerExplanationParagraphSubheader, dangerExplanationParagraph, sub, recommendations, imageButton);
                         card.setOpened(false);
                         card.setWidthFull();
                         card.addThemeVariants(DetailsVariant.FILLED, DetailsVariant.SMALL);
@@ -213,8 +213,8 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
                 System.out.println(e);
             }
         } else {
-            title.setText("Address Details");
-            description.setText("No address provided. Return to the home view and choose a location to see tailored risk details.");
+            title.setText("Error der Adresse");
+            description.setText("Keine Adresse ausgewählt. Bitte zur Home-Seite zurückkehren und eine Adresse aussuchen, um die Risikodetails zu sehen.");
         }
     }
 

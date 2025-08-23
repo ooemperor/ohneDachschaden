@@ -40,9 +40,9 @@ import elemental.json.JsonObject;
 @JavaScript("https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js")
 public class HomeView extends VerticalLayout {
 
-    private final ComboBox<String> addressBox = new ComboBox<>("Address");
+    private final ComboBox<String> addressBox = new ComboBox<>("Adresse");
     private final Div mapDiv = new Div();
-    private final Button logButton = new Button("Show Details");
+    private final Button logButton = new Button("Details anzeigen");
 
     private Double selectedLat;
     private Double selectedLng;
@@ -59,10 +59,10 @@ public class HomeView extends VerticalLayout {
         setSizeFull();
 
         addressBox.setWidthFull();
-        addressBox.setPlaceholder("Search address...");
+        addressBox.setPlaceholder("Adresse suchen...");
         addressBox.setAllowCustomValue(true);
         addressBox.setClearButtonVisible(true);
-        addressBox.setHelperText("Type to search; click the map to pick a location");
+        addressBox.setHelperText("Geben Sie eine Adresse in das Suchfeld ein oder klicken Sie auf die Karte, um einen Ort auszuwählen.");
 
         // Data provider for suggestions via Nominatim (OpenStreetMap)
         addressBox.setItems(query -> {

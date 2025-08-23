@@ -27,16 +27,16 @@ public class AdminBuilding {
     private String LGBKR;
     private String LPARZ;
     private String LPARZSX;
-    private String LTYP;
+    private String LTYP;  // Typ des Grundstücks
     private String GEBNR;
     private String GBEZ;
     private String GKODE;
     private String GKODN;
     private String GKSCE;
     private String GSTAT;
-    private String GKAT;
-    private String GKLAS;
-    private String GBAUJ;
+    private String GKAT;  // Gebäudekategorie
+    private String GKLAS;  // Gebäudeklasse
+    private String GBAUJ;  // Baujahr
     private String GBAUM;
     private String GBAUP;
     private String GABBJ;
@@ -44,7 +44,7 @@ public class AdminBuilding {
     private String GVOL;
     private String GVOLNORM;
     private String GVOLSCE;
-    private String GASTW;
+    private String GASTW;  // Anzahl Geschosse
     private String GANZWHG;
     private String GAZZI;
     private String GSCHUTZR;
