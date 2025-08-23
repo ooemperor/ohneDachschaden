@@ -34,7 +34,7 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
     private final HorizontalLayout topBar = new HorizontalLayout();
     private final Button backButton = new Button(new Icon(VaadinIcon.ARROW_LEFT));
     private final DangerService service;
-    private List<String> dangers;
+    private List<Danger> dangers;
 
     @Autowired
     public DetailView(
@@ -150,9 +150,9 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
 
             dangers = service.getDangers(formattedAddress);
             if (dangers != null) {
-                for (String danger : dangers) {
+                for (Danger danger : dangers) {
                     // Header for card
-                    H2 header = new H2(danger);
+                    H2 header = new H2(danger.toString());
                     header.getStyle().set("margin", "0");
                     header.getStyle().set("font-weight", "700");
 
@@ -161,13 +161,13 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
                     dangerExplanationParagraphSubheader.getStyle().set("color", "var(--lumo-secondary-text-color)");
                     dangerExplanationParagraphSubheader.getStyle().set("font-weight", "600");
 
-                    Paragraph dangerExplanationParagraph = new Paragraph(service.getDangerExplanation(danger));
+                    Paragraph dangerExplanationParagraph = new Paragraph(service.getDangerExplanation(danger.toString()));
 
                     // Recommendations as a bulleted list
                     UnorderedList recommendations = new UnorderedList();
                     recommendations.getStyle().set("margin", "var(--lumo-space-s) 0 0 0");
                     recommendations.getStyle().set("padding-left", "1.25rem");
-                    for (String recommendation : service.getRecommendations(address, danger)) {
+                    for (String recommendation : service.getRecommendations(address, danger.toString())) {
                         ListItem li = new ListItem(new Paragraph(recommendation));
                         li.getStyle().set("margin", "0 0 var(--lumo-space-xs) 0");
                         recommendations.add(li);
@@ -193,6 +193,7 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
                     card.getElement().addEventListener("mouseleave", e -> {
                         card.getStyle().set("box-shadow", "var(--lumo-box-shadow-s)");
                     });
+                    card.getStyle().set("background-color", danger.getSeverity().getColor());
 
                     dangerCards.add(card);
                 }
