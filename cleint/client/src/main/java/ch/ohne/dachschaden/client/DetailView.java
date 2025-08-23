@@ -34,13 +34,15 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
     private final HorizontalLayout topBar = new HorizontalLayout();
     private final Button backButton = new Button(new Icon(VaadinIcon.ARROW_LEFT));
     private final DangerService service;
+    private final EgidService egidService;
     private List<Danger> dangers;
 
     @Autowired
     public DetailView(
-            DangerService dangerService
-    ) {
+            DangerService dangerService,
+            EgidService egidService) {
         this.service = dangerService;
+        this.egidService = egidService;
 
         // Root layout styling
         setWidthFull();
@@ -147,64 +149,68 @@ public class DetailView extends VerticalLayout implements HasUrlParameter<String
 
             // Replace description content to include context
             description.setText("Below are identified risk categories and practical recommendations tailored for this address.");
+            try {
+                String egid = egidService.findEgidByAddress(formattedAddress);
+                System.out.println("egid: " + egid);
+                dangers = service.getDangers(egid);
+                if (dangers != null) {
+                    for (Danger danger : dangers) {
+                        // Header for card
+                        H2 header = new H2(danger.toString());
+                        header.getStyle().set("margin", "0");
+                        header.getStyle().set("font-weight", "700");
 
-            dangers = service.getDangers(formattedAddress);
-            if (dangers != null) {
-                for (Danger danger : dangers) {
-                    // Header for card
-                    H2 header = new H2(danger.toString());
-                    header.getStyle().set("margin", "0");
-                    header.getStyle().set("font-weight", "700");
+                        Paragraph dangerExplanationParagraphSubheader = new Paragraph("Explanation");
+                        dangerExplanationParagraphSubheader.getStyle().set("margin", "0");
+                        dangerExplanationParagraphSubheader.getStyle().set("color", "var(--lumo-secondary-text-color)");
+                        dangerExplanationParagraphSubheader.getStyle().set("font-weight", "600");
 
-                    Paragraph dangerExplanationParagraphSubheader = new Paragraph("Explanation");
-                    dangerExplanationParagraphSubheader.getStyle().set("margin", "0");
-                    dangerExplanationParagraphSubheader.getStyle().set("color", "var(--lumo-secondary-text-color)");
-                    dangerExplanationParagraphSubheader.getStyle().set("font-weight", "600");
+                        Paragraph dangerExplanationParagraph = new Paragraph(service.getDangerExplanation(danger.toString()));
 
-                    Paragraph dangerExplanationParagraph = new Paragraph(service.getDangerExplanation(danger.toString()));
+                        // Recommendations as a bulleted list
+                        UnorderedList recommendations = new UnorderedList();
+                        recommendations.getStyle().set("margin", "var(--lumo-space-s) 0 0 0");
+                        recommendations.getStyle().set("padding-left", "1.25rem");
+                        for (String recommendation : service.getRecommendations(egid, danger.toString(), address)) {
+                            ListItem li = new ListItem(new Paragraph(recommendation));
+                            li.getStyle().set("margin", "0 0 var(--lumo-space-xs) 0");
+                            recommendations.add(li);
+                        }
 
-                    // Recommendations as a bulleted list
-                    UnorderedList recommendations = new UnorderedList();
-                    recommendations.getStyle().set("margin", "var(--lumo-space-s) 0 0 0");
-                    recommendations.getStyle().set("padding-left", "1.25rem");
-                    for (String recommendation : service.getRecommendations(address, danger.toString())) {
-                        ListItem li = new ListItem(new Paragraph(recommendation));
-                        li.getStyle().set("margin", "0 0 var(--lumo-space-xs) 0");
-                        recommendations.add(li);
-                    }
+                        // Optional subheader
+                        Paragraph sub = new Paragraph("Recommendations");
+                        sub.getStyle().set("margin", "0");
+                        sub.getStyle().set("color", "var(--lumo-secondary-text-color)");
+                        sub.getStyle().set("font-weight", "600");
 
-                    // Optional subheader
-                    Paragraph sub = new Paragraph("Recommendations");
-                    sub.getStyle().set("margin", "0");
-                    sub.getStyle().set("color", "var(--lumo-secondary-text-color)");
-                    sub.getStyle().set("font-weight", "600");
+                        // Image Buttons
+                        Button imageButton = new Button("See other solutions");
+                        Map<String, List<String>> parameters = new HashMap<>();
+                        parameters.put("danger", Collections.singletonList(danger.getName()));
+                        parameters.put("address", Collections.singletonList(address));
+                        imageButton.addClickListener(e -> UI.getCurrent().navigate("/images", new QueryParameters(parameters)));
 
-                    // Image Buttons
-
-                    Button imageButton = new Button("See other solutions");
-                    Map<String, List<String>> parameters = new HashMap<>();
-                    parameters.put("danger", Collections.singletonList(danger.getName()));
-                    parameters.put("address", Collections.singletonList(address));
-                    imageButton.addClickListener(e -> UI.getCurrent().navigate("/images", new QueryParameters(parameters)));
-
-                    // Card component (Details) with premium styling
-                    Details card = new Details(header, dangerExplanationParagraphSubheader, dangerExplanationParagraph, sub, recommendations, imageButton);
-                    card.setOpened(false);
-                    card.setWidthFull();
-                    card.addThemeVariants(DetailsVariant.FILLED, DetailsVariant.SMALL);
-                    card.getStyle().set("border-radius", "12px");
-                    card.getStyle().set("box-shadow", "var(--lumo-box-shadow-s)");
-                    card.getStyle().set("transition", "box-shadow 160ms ease");
-                    card.getElement().addEventListener("mouseenter", e -> {
-                        card.getStyle().set("box-shadow", "var(--lumo-box-shadow-m)");
-                    });
-                    card.getElement().addEventListener("mouseleave", e -> {
+                        // Card component (Details) with premium styling
+                        Details card = new Details(header, dangerExplanationParagraphSubheader, dangerExplanationParagraph, sub, recommendations);
+                        card.setOpened(false);
+                        card.setWidthFull();
+                        card.addThemeVariants(DetailsVariant.FILLED, DetailsVariant.SMALL);
+                        card.getStyle().set("border-radius", "12px");
                         card.getStyle().set("box-shadow", "var(--lumo-box-shadow-s)");
-                    });
-                    card.getStyle().set("background-color", danger.getSeverity().getColor());
+                        card.getStyle().set("transition", "box-shadow 160ms ease");
+                        card.getElement().addEventListener("mouseenter", e -> {
+                            card.getStyle().set("box-shadow", "var(--lumo-box-shadow-m)");
+                        });
+                        card.getElement().addEventListener("mouseleave", e -> {
+                            card.getStyle().set("box-shadow", "var(--lumo-box-shadow-s)");
+                        });
+                        card.getStyle().set("background-color", danger.getSeverity().getColor());
 
-                    dangerCards.add(card);
+                        dangerCards.add(card);
+                    }
                 }
+            } catch (Exception e) {
+                System.out.println(e);
             }
         } else {
             title.setText("Address Details");

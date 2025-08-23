@@ -1,5 +1,7 @@
 package ch.ohne.dachschaden.client;
 
+import ch.ohne.dachschaden.client.adminBuilding.AdminBuilding;
+import ch.ohne.dachschaden.client.adminBuilding.AdminBuildingRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,11 @@ public class EgidService {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final AdminBuildingRepository adminBuildingRepository;
+
+    public EgidService(AdminBuildingRepository adminBuildingRepository) {
+        this.adminBuildingRepository = adminBuildingRepository;
+    }
 
     public String findEgidByAddress(String address) throws Exception {
         try {
@@ -42,5 +49,9 @@ public class EgidService {
         } catch (Exception e) {
             throw new Exception("Fehler: " + e.getMessage());
         }
+    }
+
+    public AdminBuilding findBuildingByEgid(String egid) {
+        return adminBuildingRepository.findAdminBuildingByEGID(egid);
     }
 }

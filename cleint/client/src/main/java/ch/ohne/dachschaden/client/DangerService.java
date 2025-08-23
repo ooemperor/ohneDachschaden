@@ -1,5 +1,6 @@
 package ch.ohne.dachschaden.client;
 
+import ch.ohne.dachschaden.client.adminBuilding.AdminBuilding;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,8 @@ public class DangerService {
      * Returns a list of potential dangers for a given address.
      * For now, this returns fake data. Prepared code for a future API call is included below as comments.
      */
-    public List<Danger> getDangers(String address) {
+    public List<Danger> getDangers(String egid) {
         try {
-            String egid = egidService.findEgidByAddress(address);
             System.out.println(egid);
             // Gleichheitszeichen korrekt kodieren
             String url = "https://webgis.gvb.ch/server/rest/services/natur/GEBAEUDE_NATURGEFAHREN_BE_DE_FR/MapServer/1/query" +
@@ -68,9 +68,9 @@ public class DangerService {
      * Returns a list of recommendations for a given address and selected danger (danger).
      * For now, this returns fake data. Prepared code for a future API call is included below as comments.
      */
-    public List<String> getRecommendations(String address, String danger) {
-
-        return List.of(aiService.getDangerSolutions(danger, address).split(";"));
+    public List<String> getRecommendations(String egid, String danger, String address) {
+        AdminBuilding building = egidService.findBuildingByEgid(egid);
+        return List.of(aiService.getDangerSolutions(building, danger, address).split(";"));
     }
 
     private List<Danger> buildDangersFromResponse(JsonNode root) {
