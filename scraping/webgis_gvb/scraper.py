@@ -29,7 +29,7 @@ def fetch_egids():
     cur = conn.cursor()
 
     # Execute a query
-    cur.execute("select egid from public.admin_building where gdekt = 'BE';")
+    cur.execute("select egid from public.admin_building where gdekt = 'BE' ORDER BY egid;")
 
     # Fetch all results as a list of tuples
     results = cur.fetchall()
