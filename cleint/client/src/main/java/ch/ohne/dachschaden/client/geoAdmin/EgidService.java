@@ -8,19 +8,20 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Optional;
-
 @Service
 @Validated
 public class EgidService {
 
     private final GeoAdminClient geoAdminClient;
+    private final GeoAdminMapper geoAdminMapper;
     private final AdminBuildingRepository adminBuildingRepository;
 
     public EgidService(GeoAdminClient geoAdminClient,
-                       AdminBuildingRepository adminBuildingRepository) {
+                       AdminBuildingRepository adminBuildingRepository,
+                       GeoAdminMapper geoAdminMapper) {
         this.geoAdminClient = geoAdminClient;
         this.adminBuildingRepository = adminBuildingRepository;
+        this.geoAdminMapper = geoAdminMapper;
     }
 
     /**
@@ -32,30 +33,14 @@ public class EgidService {
     public String findEgidByAddress(@NotBlank String address) {
         try {
             SearchResponse search = geoAdminClient.searchAddress(address);
-
-            var featureId = Optional.ofNullable(search)
-                    .map(SearchResponse::results)
-                    .filter(list -> !list.isEmpty())
-                    .map(list -> list.getFirst())
-                    .map(SearchResponse.Result::attrs)
-                    .map(SearchResponse.Attrs::featureId)
-                    .filter(id -> id != null && !id.isBlank())
-                    .orElseThrow(() -> new AddressNotFoundException("Kein Treffer/FeatureId gefunden."));
-
+            String featureId = geoAdminMapper.extractFeatureId(search);
             FeatureResponse feature = geoAdminClient.fetchFeature(featureId);
-
-            return Optional.ofNullable(feature)
-                    .map(FeatureResponse::feature)
-                    .map(FeatureResponse.Feature::attributes)
-                    .map(FeatureResponse.Attributes::egid)
-                    .filter(e -> e != null && !e.isBlank())
-                    .orElseThrow(() -> new AddressNotFoundException("EGID nicht gefunden."));
-
+            return geoAdminMapper.extractEgid(feature);
 
         } catch (AddressNotFoundException e) {
-            throw e;
+            throw e; // domain error: bubble up as-is
         } catch (RuntimeException e) {
-            // Wrap low-level client issues
+            // transport/serialization/etc.
             throw new ExternalGeoServiceException("Fehler beim externen Geo-Dienst", e);
         }
     }
